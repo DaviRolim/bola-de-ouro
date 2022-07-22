@@ -1,9 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   initializeDateFormatting('pt_BR');
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -17,7 +25,51 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.grey,
       ),
-      home: const App(),
+      home: App(),
+    );
+  }
+}
+
+class UserInformation extends StatefulWidget {
+  @override
+  _UserInformationState createState() => _UserInformationState();
+}
+
+class _UserInformationState extends State<UserInformation> {
+  final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('users').snapshots();
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _usersStream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text("Loading");
+        }
+
+        return Column(
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map<String, dynamic> data =
+                document.data()! as Map<String, dynamic>;
+            Timestamp? lastPay = data['lastPay'];
+            print('EEEEI $data');
+            return GridRow(
+                name: data['name'],
+                monthlyOrDaily: data['monthlyPayer'] ? 'M' : 'D',
+                lastPay: lastPay != null
+                    ? DateFormat.MMMMd('pt_BR').format(
+                        DateTime.fromMicrosecondsSinceEpoch(
+                            lastPay.microsecondsSinceEpoch))
+                    : 'NA',
+                goalsString: '5');
+          }).toList(),
+        );
+      },
     );
   }
 }
@@ -45,55 +97,70 @@ class App extends StatelessWidget {
             child: SizedBox(
               width: size.width * 0.8,
               height: size.height * 0.75,
-              child: Column(
-                children: [
-                  const GridHeader(),
-                  Container(
-                    height: 40,
-                    color: Colors.grey[200],
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          width: 80,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Davi Rolim',
-                            style: Theme.of(context).textTheme.bodyMedium!,
-                          ),
-                        ),
-                        Container(
-                          width: 35,
-                          alignment: Alignment.center,
-                          child: Text(
-                            '2',
-                            style: Theme.of(context).textTheme.bodyMedium!,
-                          ),
-                        ),
-                        Container(
-                          width: 35,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'M',
-                            style: Theme.of(context).textTheme.bodyMedium!,
-                          ),
-                        ),
-                        Container(
-                          width: 90,
-                          alignment: Alignment.center,
-                          child: Text(
-                            DateFormat.MMMMd('pt_BR').format(DateTime.now()),
-                            style: Theme.of(context).textTheme.bodyMedium!,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [const GridHeader(), UserInformation()],
+                ),
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class GridRow extends StatelessWidget {
+  const GridRow(
+      {Key? key,
+      required this.name,
+      required this.monthlyOrDaily,
+      required this.lastPay,
+      required this.goalsString})
+      : super(key: key);
+  final String name;
+  final String monthlyOrDaily;
+  final String lastPay;
+  final String goalsString;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      color: Colors.grey[200],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            width: 80,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              name,
+              style: Theme.of(context).textTheme.bodyMedium!,
+            ),
+          ),
+          Container(
+            width: 35,
+            alignment: Alignment.center,
+            child: Text(
+              goalsString,
+              style: Theme.of(context).textTheme.bodyMedium!,
+            ),
+          ),
+          Container(
+            width: 35,
+            alignment: Alignment.center,
+            child: Text(
+              monthlyOrDaily,
+              style: Theme.of(context).textTheme.bodyMedium!,
+            ),
+          ),
+          Container(
+            width: 90,
+            alignment: Alignment.center,
+            child: Text(lastPay),
+          ),
+        ],
       ),
     );
   }
