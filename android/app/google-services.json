@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "51248346812",
+    "project_id": "bola-de-ouro-1",
+    "storage_bucket": "bola-de-ouro-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51248346812:android:704af31cd5c929f72c42b9",
+        "android_client_info": {
+          "package_name": "com.example.bola_de_ouro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51248346812-ncrb330apsepgt8tb9p9a8r1f5u8aoi8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhWYS7sCFlOiiyyOC96qXcUfA9N-8pL7I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51248346812-ncrb330apsepgt8tb9p9a8r1f5u8aoi8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "51248346812-rkk2acf0gdcckdiu7skre4f6b5qgflnq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bolaDeOuro"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
