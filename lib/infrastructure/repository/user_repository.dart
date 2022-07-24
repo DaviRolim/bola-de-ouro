@@ -6,9 +6,6 @@ import '../models/user.dart';
 class UserState extends ChangeNotifier {
   List<QueryDocumentSnapshot<User>>? _users;
   List<QueryDocumentSnapshot<User>> get users => _users ?? [];
-  List<QueryDocumentSnapshot<User>>? _usersNotPlaying;
-  List<QueryDocumentSnapshot<User>> get usersNotPlaying =>
-      _usersNotPlaying ?? [];
 
   final _firestore = FirebaseFirestore.instance;
 
@@ -22,9 +19,11 @@ class UserState extends ChangeNotifier {
             toFirestore: (User user, _) => user.toJson(),
           );
   UserState() {
-    _usersRef.orderBy('monthlyPayer').snapshots().listen((event) {
+    _usersRef
+        .orderBy('monthlyPayer', descending: true)
+        .snapshots()
+        .listen((event) {
       _users = event.docs;
-      _usersNotPlaying ??= _users;
       notifyListeners();
     });
   }
@@ -41,10 +40,10 @@ class UserState extends ChangeNotifier {
     _usersRef.doc(userId).update({"totalGols": FieldValue.increment(-1)});
   }
 
-  void removePlayerFromNotPlayingList(String id) {
-    _usersNotPlaying?.removeWhere((user) => user.data().id == id);
-    notifyListeners();
-  }
+  // void removePlayerFromNotPlayingList(String id) {
+  //   _usersNotPlaying?.removeWhere((user) => user.data().id == id);
+  //   notifyListeners();
+  // }
 
   void addUser(String playerName, bool isMonthlyPayer) {
     final jsonNewUser = {

@@ -225,9 +225,9 @@ class AddPlayerCard extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(30),
-                itemCount: usersState.usersNotPlaying.length,
+                itemCount: usersState.users.length,
                 itemBuilder: (_, index) {
-                  final userDoc = usersState.usersNotPlaying[index];
+                  final userDoc = usersState.users[index];
                   final user = userDoc.data();
                   return SizedBox(
                     height: 40,
@@ -242,10 +242,6 @@ class AddPlayerCard extends StatelessWidget {
                               context
                                   .read<PeladaState>()
                                   .addPlayerToPelada(user);
-
-                              context
-                                  .read<UserState>()
-                                  .removePlayerFromNotPlayingList(user.id);
                             },
                             icon: const Icon(Icons.add),
                           ),
