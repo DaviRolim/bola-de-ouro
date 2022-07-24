@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../infrastructure/repository/pelada_repository_impl.dart';
 import '../home/home.dart';
 import '../peladas/peladas.dart';
 
@@ -20,7 +22,7 @@ class NavigationDrawer extends StatelessWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.home),
-              title: const Text('Home'),
+              title: const Text('Início'),
               onTap: () {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const Home()));
@@ -33,6 +35,23 @@ class NavigationDrawer extends StatelessWidget {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const PeladaPage()));
               },
+            ),
+            Consumer<PeladaState>(
+              builder: (_, peladaState, __) => Column(
+                children: [
+                  peladaState.isPeladaAdmin
+                      ? ListTile(
+                          leading: const Icon(Icons.person),
+                          title: const Text('Gerenciar Jogadores'),
+                          onTap: () {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => const PeladaPage()));
+                          },
+                        )
+                      : Container(),
+                ],
+              ),
             ),
           ],
         ),

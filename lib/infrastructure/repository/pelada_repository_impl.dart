@@ -10,10 +10,9 @@ import '../models/userPerformance.dart';
 class PeladaState extends ChangeNotifier {
   List<QueryDocumentSnapshot<Pelada>>? _peladas;
   List<QueryDocumentSnapshot<Pelada>> get peladas => _peladas ?? [];
+  bool isPeladaAdmin = false;
 
   final _firestore = FirebaseFirestore.instance;
-
-  CollectionReference get _usersRef => _firestore.collection('users');
 
   CollectionReference<Pelada> get _peladasRef =>
       _firestore.collection('peladas').withConverter<Pelada>(
@@ -29,8 +28,10 @@ class PeladaState extends ChangeNotifier {
       final mostRecentPelada = event.docs[0];
       if (mostRecentPelada.data().date.day == DateTime.now().day) {
         _peladas = event.docs;
-        notifyListeners();
+      } else {
+        _peladas = [];
       }
+      notifyListeners();
     });
   }
 
@@ -72,5 +73,12 @@ class PeladaState extends ChangeNotifier {
         .collection('peladas')
         .doc(peladaId!)
         .update({"performance.$userId.gols": FieldValue.increment(-1)});
+  }
+
+  void validateAdminSecret(String secret) {
+    if (secret == 'uniaoflasco') {
+      isPeladaAdmin = true;
+      notifyListeners();
+    }
   }
 }
