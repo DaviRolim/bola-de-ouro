@@ -38,7 +38,8 @@ class _GridBodyState extends State<GridBody> {
             int totalGols = data['totalGols'] ?? 0;
             return GridRow(
                 name: data['name'],
-                monthlyOrDaily: data['monthlyPayer'] ? 'M' : 'D',
+                monthlyOrDaily:
+                    data['monthlyPayer'] ? 'Mensalista' : 'Diarista',
                 lastPay: lastPay != null
                     ? DateFormat.MMMMd('pt_BR').format(
                         DateTime.fromMicrosecondsSinceEpoch(

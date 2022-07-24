@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../infrastructure/repository/pelada_repository_impl.dart';
 import '../home/home.dart';
+import '../manage_users/manage_users.dart';
 import '../peladas/peladas.dart';
 
 class NavigationDrawer extends StatelessWidget {
@@ -46,7 +47,8 @@ class NavigationDrawer extends StatelessWidget {
                           onTap: () {
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
-                                    builder: (context) => const PeladaPage()));
+                                    builder: (context) =>
+                                        const UserManagement()));
                           },
                         )
                       : Container(),

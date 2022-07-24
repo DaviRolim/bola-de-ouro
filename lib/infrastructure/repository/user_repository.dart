@@ -45,4 +45,14 @@ class UserState extends ChangeNotifier {
     _usersNotPlaying?.removeWhere((user) => user.data().id == id);
     notifyListeners();
   }
+
+  void addUser(String playerName, bool isMonthlyPayer) {
+    final jsonNewUser = {
+      "name": playerName,
+      "monthlyPayer": isMonthlyPayer,
+      "totalGols": 0
+    };
+    _firestore.collection('users').add(jsonNewUser);
+    notifyListeners();
+  }
 }
