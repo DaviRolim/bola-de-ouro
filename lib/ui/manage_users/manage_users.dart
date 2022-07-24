@@ -97,7 +97,18 @@ class _UserManagementState extends State<UserManagement> {
                 style: ElevatedButton.styleFrom(primary: Colors.green),
                 child: const Text('Adicionar',
                     style: TextStyle(color: Colors.white)),
-                onPressed: () => _submitAddPlayerForm(context),
+                onPressed: () {
+                  _submitAddPlayerForm(context);
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.green,
+                    content: Text(
+                      'Jogador adicionado com sucesso',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    duration: Duration(seconds: 2),
+                  ));
+                },
               ),
             ],
           ),
