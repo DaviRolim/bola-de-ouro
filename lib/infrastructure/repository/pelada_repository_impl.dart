@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -11,6 +9,8 @@ class PeladaState extends ChangeNotifier {
   List<QueryDocumentSnapshot<Pelada>>? _peladas;
   List<QueryDocumentSnapshot<Pelada>> get peladas => _peladas ?? [];
   bool isPeladaAdmin = false;
+  List<UserPerformance>? _performances;
+  List<UserPerformance> get performances => _performances ?? [];
 
   final _firestore = FirebaseFirestore.instance;
 
@@ -28,6 +28,11 @@ class PeladaState extends ChangeNotifier {
       final mostRecentPelada = event.docs[0];
       if (mostRecentPelada.data().date.day == DateTime.now().day) {
         _peladas = event.docs;
+        final currentPelada = event.docs.first.data();
+        final userPerformances = currentPelada.usersPerformance;
+        userPerformances.sort((a, b) => a.name.compareTo(b.name));
+        _performances = userPerformances;
+        // _performances = userPerformances.reversed.toList();
       } else {
         _peladas = [];
       }

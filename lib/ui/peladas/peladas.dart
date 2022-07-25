@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../infrastructure/models/userPerformance.dart';
 import '../../infrastructure/repository/pelada_repository_impl.dart';
 import '../../infrastructure/repository/user_repository.dart';
 import '../shared/navigation_drawer.dart';
@@ -143,10 +144,11 @@ class PeladaPlayersDisplay extends StatelessWidget {
         child: Consumer<PeladaState>(
           builder: (_, peladaState, __) => Column(
             children: [
-              pelada.first.data().usersPerformance.isEmpty
+              peladaState.performances.isEmpty
                   ? const NoPlayerText()
                   : PlayingPlayersList(
-                      pelada: pelada, isPeladaAdmin: isPeladaAdmin),
+                      performances: peladaState.performances,
+                      isPeladaAdmin: isPeladaAdmin),
             ],
           ),
         ),
@@ -156,12 +158,12 @@ class PeladaPlayersDisplay extends StatelessWidget {
 }
 
 class PlayingPlayersList extends StatelessWidget {
-  final List<QueryDocumentSnapshot<Pelada>> pelada;
+  final List<UserPerformance> performances;
 
   final bool isPeladaAdmin;
   const PlayingPlayersList({
     Key? key,
-    required this.pelada,
+    required this.performances,
     required this.isPeladaAdmin,
   }) : super(key: key);
 
@@ -178,9 +180,9 @@ class PlayingPlayersList extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         padding: const EdgeInsets.all(30),
-        itemCount: pelada.first.data().usersPerformance.length,
+        itemCount: performances.length,
         itemBuilder: (_, index) {
-          final userPerformance = pelada.first.data().usersPerformance[index];
+          final userPerformance = performances[index];
           return SizedBox(
             height: 40,
             child: Row(
@@ -193,72 +195,80 @@ class PlayingPlayersList extends StatelessWidget {
                             .textTheme
                             .titleMedium!
                             .copyWith(color: Colors.white))),
-                SizedBox(
-                    width: 120,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        isPeladaAdmin
-                            ? Center(
-                                child: SizedBox(
-                                  height: 25,
-                                  width: 50,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      shape: const CircleBorder(),
-                                      primary: Colors.redAccent,
-                                    ),
-                                    onPressed: () {
-                                      context
-                                          .read<UserState>()
-                                          .removeGolFromUser(
-                                              userPerformance.id);
-                                      context
-                                          .read<PeladaState>()
-                                          .removeGolInPeladaFromUser(
-                                              userPerformance.id);
-                                    },
-                                    child: const Icon(
-                                      Icons.remove_outlined,
-                                      color: Colors.white,
-                                      size: 20,
+                Container(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: SizedBox(
+                      width: 120,
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          isPeladaAdmin
+                              ? Center(
+                                  child: SizedBox(
+                                    height: 25,
+                                    width: 50,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        shape: const CircleBorder(),
+                                        primary: Colors.redAccent,
+                                      ),
+                                      onPressed: () {
+                                        context
+                                            .read<UserState>()
+                                            .removeGolFromUser(
+                                                userPerformance.id);
+                                        context
+                                            .read<PeladaState>()
+                                            .removeGolInPeladaFromUser(
+                                                userPerformance.id);
+                                      },
+                                      child: const Icon(
+                                        Icons.remove_outlined,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                            : Container(),
-                        Text(userPerformance.gols.toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(color: Colors.white)),
-                        isPeladaAdmin
-                            ? SizedBox(
-                                height: 25,
-                                width: 50,
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      shape: const CircleBorder(),
-                                      primary: Colors.greenAccent,
-                                    ),
-                                    child: const Icon(
-                                      Icons.add,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                    onPressed: () {
-                                      context
-                                          .read<UserState>()
-                                          .goalScoredBy(userPerformance.id);
-                                      context
-                                          .read<PeladaState>()
-                                          .goalScoredInPeladaByUser(
-                                              userPerformance.id);
-                                    }),
-                              )
-                            : Container(),
-                      ],
-                    )),
+                                )
+                              : const SizedBox.shrink(),
+                          Container(
+                            color: Colors.white,
+                            width: 15,
+                            child: Text(userPerformance.gols.toString(),
+                                textAlign: TextAlign.center,
+                                style:
+                                    Theme.of(context).textTheme.titleMedium!),
+                          ),
+                          isPeladaAdmin
+                              ? Center(
+                                  child: SizedBox(
+                                    height: 25,
+                                    width: 50,
+                                    child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          shape: const CircleBorder(),
+                                          primary: Colors.greenAccent,
+                                        ),
+                                        child: const Icon(
+                                          Icons.add,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          context
+                                              .read<UserState>()
+                                              .goalScoredBy(userPerformance.id);
+                                          context
+                                              .read<PeladaState>()
+                                              .goalScoredInPeladaByUser(
+                                                  userPerformance.id);
+                                        }),
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        ],
+                      )),
+                ),
               ],
             ),
           );

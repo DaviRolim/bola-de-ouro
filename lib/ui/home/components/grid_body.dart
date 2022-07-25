@@ -12,6 +12,7 @@ class GridBody extends StatefulWidget {
 class _GridBodyState extends State<GridBody> {
   final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
       .collection('users')
+      .where("monthlyPayer", isEqualTo: true)
       .orderBy('totalGols', descending: true)
       .snapshots();
 
@@ -44,7 +45,7 @@ class _GridBodyState extends State<GridBody> {
                     ? DateFormat.MMMMd('pt_BR').format(
                         DateTime.fromMicrosecondsSinceEpoch(
                             lastPay.microsecondsSinceEpoch))
-                    : 'NA',
+                    : '-',
                 goalsString: totalGols.toString(),
                 rowIndex: idx);
           }).toList(),

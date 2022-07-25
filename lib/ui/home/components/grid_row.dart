@@ -40,19 +40,19 @@ class GridRow extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium!,
             ),
           ),
-          Container(
-            width: 80,
-            alignment: Alignment.center,
-            child: Text(
-              monthlyOrDaily,
-              style: Theme.of(context).textTheme.bodyMedium!,
-            ),
-          ),
           // Container(
-          //   width: 90,
+          //   width: 80,
           //   alignment: Alignment.center,
-          //   child: Text(lastPay),
+          //   child: Text(
+          //     monthlyOrDaily,
+          //     style: Theme.of(context).textTheme.bodyMedium!,
+          //   ),
           // ),
+          Container(
+            width: 90,
+            alignment: Alignment.center,
+            child: Text(lastPay, style: Theme.of(context).textTheme.bodyMedium!),
+          ),
         ],
       ),
     );

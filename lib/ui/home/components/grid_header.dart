@@ -34,22 +34,22 @@ class GridHeader extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleSmall!,
               ),
             ),
-            Container(
-              width: 80,
-              alignment: Alignment.center,
-              child: Text(
-                'M/D',
-                style: Theme.of(context).textTheme.titleSmall!,
-              ),
-            ),
             // Container(
-            //   width: 90,
+            //   width: 80,
             //   alignment: Alignment.center,
             //   child: Text(
-            //     'Último Pgto',
+            //     'M/D',
             //     style: Theme.of(context).textTheme.titleSmall!,
             //   ),
             // ),
+            Container(
+              width: 90,
+              alignment: Alignment.center,
+              child: Text(
+                'Último Pgto',
+                style: Theme.of(context).textTheme.titleSmall!,
+              ),
+            ),
           ],
         ),
       ),
