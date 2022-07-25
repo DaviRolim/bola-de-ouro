@@ -41,7 +41,7 @@ class _UserManagementState extends State<UserManagement> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
+      appBar: AppBar(backgroundColor: Colors.green, elevation: 0),
       drawer: const NavigationDrawer(),
       body: SafeArea(
         child: Center(
