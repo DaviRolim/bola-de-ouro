@@ -5,26 +5,27 @@ class User {
   final String name;
   final int totalGols;
   final bool isMonthlyPayer;
-  DateTime? lastPay;
+  Timestamp? lastPay;
 
   User(
       {required this.id,
       required this.name,
       required this.totalGols,
       required this.isMonthlyPayer,
-      DateTime? lastPay});
+      this.lastPay});
 
   factory User.fromJson(Map<String, dynamic>? data) {
-    final lastPay = data?['lastPay'] != null
-        ? DateTime.fromMicrosecondsSinceEpoch(
-            data!['lastPay'].microsecondsSinceEpoch)
-        : null;
+    // print('DATA $data');
     return User(
         id: data?['id'],
         name: data?['name'],
         totalGols: data?['totalGols'],
         isMonthlyPayer: data?['monthlyPayer'],
-        lastPay: lastPay);
+        lastPay: data?['lastPay']);
+  }
+  @override
+  toString() {
+    return '$name - ${lastPay?.toDate()}';
   }
 
   toJson() {

@@ -36,6 +36,18 @@ class UserState extends ChangeNotifier {
     _usersRef.doc(userId).update({"totalGols": FieldValue.increment(1)});
   }
 
+  void editUser(String id, String name, bool isMonthlyPayer, int totalGols,
+      DateTime? lastPay) {
+    final jsonNewUser = {
+      "name": name,
+      "monthlyPayer": isMonthlyPayer,
+      "totalGols": totalGols,
+      "lastPay": lastPay
+    };
+    _firestore.collection('users').doc(id).set(jsonNewUser);
+    notifyListeners();
+  }
+
   void removeGolFromUser(String userId) {
     _usersRef.doc(userId).update({"totalGols": FieldValue.increment(-1)});
   }
