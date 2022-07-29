@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../view_model/player_provider.dart';
+import '../../../providers/player_provider.dart';
 import 'grid_row.dart';
 
 class GridBody extends StatefulWidget {

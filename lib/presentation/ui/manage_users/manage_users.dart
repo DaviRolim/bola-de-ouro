@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
-import '../../infrastructure/models/player.dart';
-import '../../infrastructure/repository/user_repository.dart';
+import '../../../infrastructure/models/player.dart';
+import '../../../infrastructure/repository/user_repository.dart';
 import '../shared/navigation_drawer.dart';
 
 enum PaymentType { daily, monthly }

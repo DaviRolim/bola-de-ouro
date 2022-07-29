@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../infrastructure/repository/pelada_repository_impl.dart';
+import '../../../infrastructure/repository/pelada_repository_impl.dart';
 import '../home/home.dart';
 import '../manage_users/manage_users.dart';
 import '../peladas/peladas.dart';

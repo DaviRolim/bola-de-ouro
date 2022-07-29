@@ -1,6 +1,5 @@
-import 'package:bola_de_ouro/ui/peladas/peladas.dart';
-import 'package:bola_de_ouro/ui/view_model/player_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bola_de_ouro/presentation/providers/player_provider.dart';
+import 'package:bola_de_ouro/presentation/ui/home/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -9,8 +8,6 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'infrastructure/repository/pelada_repository_impl.dart';
 import 'infrastructure/repository/user_repository.dart';
-import 'ui/home/home.dart';
-import 'ui/shared/navigation_drawer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
