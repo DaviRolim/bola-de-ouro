@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 import '../models/pelada.dart';
-import '../models/user.dart';
-import '../models/userPerformance.dart';
+import '../models/player.dart';
+import '../models/playerPerformance.dart';
 
 class PeladaState extends ChangeNotifier {
   List<QueryDocumentSnapshot<Pelada>>? _peladas;
@@ -46,7 +46,7 @@ class PeladaState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addPlayerToPelada(User user) {
+  void addPlayerToPelada(Player Player) {
     final currentPelada = _peladas?.first;
     final peladaId = currentPelada?.id;
     final performances = currentPelada?.data().usersPerformance;
@@ -54,7 +54,7 @@ class PeladaState extends ChangeNotifier {
     for (var performance in performances!) {
       jsonPerformances[performance.id] = UserPerformance.toJson(performance);
     }
-    jsonPerformances[user.id] = {"name": user.name, "gols": 0};
+    jsonPerformances[Player.id] = {"name": Player.name, "gols": 0};
 
     _firestore
         .collection('peladas')

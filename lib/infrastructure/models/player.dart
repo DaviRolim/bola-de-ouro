@@ -1,31 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
+class Player {
   final String id;
   final String name;
   final int totalGols;
   final bool isMonthlyPayer;
-  Timestamp? lastPay;
+  DateTime? lastPay;
 
-  User(
+  Player(
       {required this.id,
       required this.name,
       required this.totalGols,
       required this.isMonthlyPayer,
       this.lastPay});
 
-  factory User.fromJson(Map<String, dynamic>? data) {
-    // print('DATA $data');
-    return User(
+  factory Player.fromJson(Map<String, dynamic>? data) {
+    return Player(
         id: data?['id'],
         name: data?['name'],
         totalGols: data?['totalGols'],
         isMonthlyPayer: data?['monthlyPayer'],
-        lastPay: data?['lastPay']);
+        lastPay: data?['lastPay']?.toDate());
   }
   @override
   toString() {
-    return '$name - ${lastPay?.toDate()}';
+    return '$name - $lastPay';
   }
 
   toJson() {

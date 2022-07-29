@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../infrastructure/models/userPerformance.dart';
+import '../../infrastructure/models/playerPerformance.dart';
 import '../../infrastructure/repository/pelada_repository_impl.dart';
 import '../../infrastructure/repository/user_repository.dart';
 import '../shared/navigation_drawer.dart';
@@ -40,20 +40,20 @@ class AddPlayerCard extends StatelessWidget {
                 itemCount: usersState.users.length,
                 itemBuilder: (_, index) {
                   final userDoc = usersState.users[index];
-                  final user = userDoc.data();
+                  final player = userDoc.data();
                   return SizedBox(
                     height: 40,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        SizedBox(width: 120, child: Text(user.name)),
+                        SizedBox(width: 120, child: Text(player.name)),
                         SizedBox(
                           width: 100,
                           child: IconButton(
                             onPressed: () {
                               context
                                   .read<PeladaState>()
-                                  .addPlayerToPelada(user);
+                                  .addPlayerToPelada(player);
                             },
                             icon: const Icon(Icons.add),
                           ),

@@ -1,22 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import '../models/user.dart';
+import '../models/player.dart';
 
 class UserState extends ChangeNotifier {
-  List<QueryDocumentSnapshot<User>>? _users;
-  List<QueryDocumentSnapshot<User>> get users => _users ?? [];
+  List<QueryDocumentSnapshot<Player>>? _users;
+  List<QueryDocumentSnapshot<Player>> get users => _users ?? [];
 
   final _firestore = FirebaseFirestore.instance;
 
-  CollectionReference<User> get _usersRef =>
-      _firestore.collection('users').withConverter<User>(
+  CollectionReference<Player> get _usersRef =>
+      _firestore.collection('users').withConverter<Player>(
             fromFirestore: (snapshot, _) {
               final data = snapshot.data();
               data?['id'] = snapshot.id;
-              return User.fromJson(data);
+              return Player.fromJson(data);
             },
-            toFirestore: (User user, _) => user.toJson(),
+            toFirestore: (Player player, _) => player.toJson(),
           );
   UserState() {
     _usersRef
@@ -27,6 +27,8 @@ class UserState extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  
 
   Future<QuerySnapshot> _getMonthlyPayers() {
     return _usersRef.where('monthlyPayer', isEqualTo: true).get();
@@ -53,7 +55,7 @@ class UserState extends ChangeNotifier {
   }
 
   // void removePlayerFromNotPlayingList(String id) {
-  //   _usersNotPlaying?.removeWhere((user) => user.data().id == id);
+  //   _usersNotPlaying?.removeWhere((Player) => Player.data().id == id);
   //   notifyListeners();
   // }
 

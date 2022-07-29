@@ -1,4 +1,5 @@
 import 'package:bola_de_ouro/ui/peladas/peladas.dart';
+import 'package:bola_de_ouro/ui/view_model/player_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,9 @@ void main() async {
       ),
       ChangeNotifierProvider(
         create: (_) => UserState(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => PlayerProvider(),
       ),
     ], child: const MyApp()),
   );

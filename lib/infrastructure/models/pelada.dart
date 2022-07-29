@@ -1,4 +1,4 @@
-import 'package:bola_de_ouro/infrastructure/models/userPerformance.dart';
+import 'package:bola_de_ouro/infrastructure/models/playerPerformance.dart';
 
 class Pelada {
   final DateTime date;

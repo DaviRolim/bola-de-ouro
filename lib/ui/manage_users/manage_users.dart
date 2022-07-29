@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
-import '../../infrastructure/models/user.dart';
+import '../../infrastructure/models/player.dart';
 import '../../infrastructure/repository/user_repository.dart';
 import '../shared/navigation_drawer.dart';
 
@@ -133,9 +133,8 @@ class _UserManagementState extends State<UserManagement> {
                           itemCount: userState.users.length,
                           itemBuilder: (_, index) {
                             final userDoc = userState.users[index];
-                            final user = userDoc.data();
-                            print(user.toString());
-                            return EditUserRow(user: user);
+                            final player = userDoc.data();
+                            return EditUserRow(player: player);
                           },
                         ),
                       ],
@@ -152,9 +151,9 @@ class _UserManagementState extends State<UserManagement> {
 }
 
 class EditUserRow extends StatefulWidget {
-  const EditUserRow({super.key, required this.user});
+  const EditUserRow({super.key, required this.player});
 
-  final User user;
+  final Player player;
   @override
   State<EditUserRow> createState() => _EditUserRowState();
 }
@@ -169,9 +168,9 @@ class _EditUserRowState extends State<EditUserRow> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    _controller.text = widget.user.name;
-    _isMonthlyPayer = widget.user.isMonthlyPayer;
-    _payDay = widget.user.lastPay?.toDate();
+    _controller.text = widget.player.name;
+    _isMonthlyPayer = widget.player.isMonthlyPayer;
+    _payDay = widget.player.lastPay;
   }
 
   @override
@@ -181,8 +180,8 @@ class _EditUserRowState extends State<EditUserRow> {
   }
 
   void _submitEditPlayerForm(BuildContext context) {
-    context.read<UserState>().editUser(widget.user.id, _controller.text,
-        _isMonthlyPayer, widget.user.totalGols, _payDay);
+    context.read<UserState>().editUser(widget.player.id, _controller.text,
+        _isMonthlyPayer, widget.player.totalGols, _payDay);
   }
 
   @override
@@ -206,7 +205,7 @@ class _EditUserRowState extends State<EditUserRow> {
                 width: 80,
                 padding: const EdgeInsets.only(right: 10),
                 child: Text(
-                    widget.user.isMonthlyPayer ? 'Mensalista' : 'Diarista')),
+                    widget.player.isMonthlyPayer ? 'Mensalista' : 'Diarista')),
           if (isEditing)
             Checkbox(
               checkColor: Colors.white,
