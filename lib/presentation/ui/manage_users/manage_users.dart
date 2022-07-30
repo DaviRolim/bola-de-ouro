@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
 import '../../../infrastructure/models/player.dart';
-import '../../../infrastructure/repository/user_repository.dart';
+import '../../providers/player_provider.dart';
 import '../shared/navigation_drawer.dart';
 
 enum PaymentType { daily, monthly }
@@ -35,7 +35,7 @@ class _UserManagementState extends State<UserManagement> {
   void _submitAddPlayerForm(BuildContext context) {
     final isMonthlyPayer = _paymentType.toString() == 'PaymentType.monthly';
     _playerName = _controller.text;
-    context.read<UserState>().addUser(_playerName, isMonthlyPayer);
+    context.read<PlayerProvider>().addUser(_playerName, isMonthlyPayer);
     _controller.clear();
   }
 
@@ -115,8 +115,8 @@ class _UserManagementState extends State<UserManagement> {
                 ),
                 const SizedBox(height: 30),
                 Card(
-                  child: Consumer<UserState>(
-                    builder: (_, userState, __) => Column(
+                  child: Consumer<PlayerProvider>(
+                    builder: (_, playerProvider, __) => Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 10),
@@ -130,10 +130,9 @@ class _UserManagementState extends State<UserManagement> {
                           shrinkWrap: true,
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 5),
-                          itemCount: userState.users.length,
+                          itemCount: playerProvider.players.length,
                           itemBuilder: (_, index) {
-                            final userDoc = userState.users[index];
-                            final player = userDoc.data();
+                            final player = playerProvider.players[index];
                             return EditUserRow(player: player);
                           },
                         ),
@@ -180,7 +179,7 @@ class _EditUserRowState extends State<EditUserRow> {
   }
 
   void _submitEditPlayerForm(BuildContext context) {
-    context.read<UserState>().editUser(widget.player.id, _controller.text,
+    context.read<PlayerProvider>().editUser(widget.player.id, _controller.text,
         _isMonthlyPayer, widget.player.totalGols, _payDay);
   }
 

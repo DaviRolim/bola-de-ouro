@@ -7,8 +7,6 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'infrastructure/repository/pelada_repository_impl.dart';
-import 'infrastructure/repository/user_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,9 +16,6 @@ void main() async {
   );
   runApp(
     MultiProvider(providers: [
-      ChangeNotifierProvider(
-        create: (_) => UserState(),
-      ),
       ChangeNotifierProvider(
         create: (_) => PlayerProvider(),
       ),

@@ -1,13 +1,11 @@
 import 'package:bola_de_ouro/infrastructure/models/pelada.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../infrastructure/models/playerPerformance.dart';
-import '../../../infrastructure/repository/pelada_repository_impl.dart';
-import '../../../infrastructure/repository/user_repository.dart';
 import '../../providers/pelada_provider.dart';
+import '../../providers/player_provider.dart';
 import '../shared/navigation_drawer.dart';
 
 class AddPlayerCard extends StatelessWidget {
@@ -25,8 +23,8 @@ class AddPlayerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        child: Consumer<UserState>(
-          builder: (_, usersState, __) => Column(
+        child: Consumer<PlayerProvider>(
+          builder: (_, playerProvider, __) => Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 10),
@@ -38,10 +36,9 @@ class AddPlayerCard extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(30),
-                itemCount: usersState.users.length,
+                itemCount: playerProvider.players.length,
                 itemBuilder: (_, index) {
-                  final userDoc = usersState.users[index];
-                  final player = userDoc.data();
+                  final player = playerProvider.players[index];
                   return SizedBox(
                     height: 40,
                     child: Row(
@@ -91,8 +88,9 @@ class ButtonStartPelada extends StatelessWidget {
         icon: const Icon(Icons.sports_soccer, color: Colors.white, size: 54),
         style: ElevatedButton.styleFrom(
             primary: isPeladaAdmin ? Colors.black : Colors.transparent),
-        onPressed: () =>
-            isPeladaAdmin ? context.read<PeladaProvider>().startNewPelada() : null,
+        onPressed: () => isPeladaAdmin
+            ? context.read<PeladaProvider>().startNewPelada()
+            : null,
         label: Text(
           'Iniciar Pelada',
           style: Theme.of(context)
@@ -142,16 +140,16 @@ class PeladaPlayersDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        child:  Column(
-            children: [
-              pelada.usersPerformance.isEmpty
-                  ? const NoPlayerText()
-                  : PlayingPlayersList(
-                      performances: pelada.usersPerformance,
-                      isPeladaAdmin: isPeladaAdmin),
-            ],
-          ),
+        child: Column(
+          children: [
+            pelada.usersPerformance.isEmpty
+                ? const NoPlayerText()
+                : PlayingPlayersList(
+                    performances: pelada.usersPerformance,
+                    isPeladaAdmin: isPeladaAdmin),
+          ],
         ),
+      ),
     );
   }
 }
@@ -213,7 +211,7 @@ class PlayingPlayersList extends StatelessWidget {
                                       ),
                                       onPressed: () {
                                         context
-                                            .read<UserState>()
+                                            .read<PlayerProvider>()
                                             .removeGolFromUser(
                                                 userPerformance.id);
                                         context
@@ -255,12 +253,11 @@ class PlayingPlayersList extends StatelessWidget {
                                         ),
                                         onPressed: () {
                                           context
-                                              .read<UserState>()
-                                              .goalScoredBy(userPerformance.id);
+                                              .read<PlayerProvider>()
+                                              .golScoredBy(userPerformance.id);
                                           context
                                               .read<PeladaProvider>()
-                                              .playerScored(
-                                                  userPerformance.id);
+                                              .playerScored(userPerformance.id);
                                         }),
                                   ),
                                 )

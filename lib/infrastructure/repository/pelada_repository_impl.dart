@@ -1,3 +1,4 @@
+import 'package:bola_de_ouro/infrastructure/helpers/try_get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/pelada.dart';
@@ -13,7 +14,7 @@ class PeladaRepositoryImpl {
     _firestore.collection('peladas').add(peladaData);
   }
 
-  Stream<Pelada> getPeladaOfCurrentDay() {
+  Stream<Pelada?> getPeladaOfCurrentDay() {
     final now = DateTime.now().toLocal();
     final today = DateTime(now.year, now.month, now.day);
     return _firestore
@@ -25,7 +26,7 @@ class PeladaRepositoryImpl {
         final data = doc.data();
         data['id'] = doc.id;
         return Pelada.fromJson(data);
-      }).toList()[0];
+      }).toList().tryGet(0);
     });
   }
 

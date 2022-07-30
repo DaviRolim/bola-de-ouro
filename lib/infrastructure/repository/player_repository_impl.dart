@@ -53,10 +53,17 @@ class PlayerRepository {
     _firestore.collection('users').doc(id).set(jsonNewUser);
   }
 
-  // void goalScoredBy(String userId) {
-  //   _usersRef.doc(userId).update({"totalGols": FieldValue.increment(1)});
-  // }
-  // void removeGolFromUser(String userId) {
-  //   _usersRef.doc(userId).update({"totalGols": FieldValue.increment(-1)});
-  // }
+  void increaseUserTotalGols(String userId) {
+    _firestore
+        .collection('users')
+        .doc(userId)
+        .update({"totalGols": FieldValue.increment(1)});
+  }
+
+  void decreaseUserTotalGols(String userId) {
+    _firestore
+        .collection('users')
+        .doc(userId)
+        .update({"totalGols": FieldValue.increment(-1)});
+  }
 }
