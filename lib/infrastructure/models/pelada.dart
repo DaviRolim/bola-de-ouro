@@ -8,7 +8,6 @@ class Pelada {
   Pelada({required this.id, required this.date, required this.usersPerformance});
 
   factory Pelada.fromJson(Map<String, dynamic>? data) {
-    print('PELADA DATA $data');
     final performances = data?['performance'] as Map<String, dynamic>;
     List<UserPerformance> allPerformances = [];
     if (performances.isNotEmpty) {
