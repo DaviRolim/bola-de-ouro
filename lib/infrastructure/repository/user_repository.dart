@@ -29,11 +29,6 @@ class UserState extends ChangeNotifier {
   }
 
   
-
-  Future<QuerySnapshot> _getMonthlyPayers() {
-    return _usersRef.where('monthlyPayer', isEqualTo: true).get();
-  }
-
   void goalScoredBy(String userId) {
     _usersRef.doc(userId).update({"totalGols": FieldValue.increment(1)});
   }
@@ -53,11 +48,6 @@ class UserState extends ChangeNotifier {
   void removeGolFromUser(String userId) {
     _usersRef.doc(userId).update({"totalGols": FieldValue.increment(-1)});
   }
-
-  // void removePlayerFromNotPlayingList(String id) {
-  //   _usersNotPlaying?.removeWhere((Player) => Player.data().id == id);
-  //   notifyListeners();
-  // }
 
   void addUser(String playerName, bool isMonthlyPayer) {
     final jsonNewUser = {

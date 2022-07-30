@@ -1,12 +1,14 @@
 import 'package:bola_de_ouro/infrastructure/models/playerPerformance.dart';
 
 class Pelada {
+  final String id;
   final DateTime date;
   final List<UserPerformance> usersPerformance;
 
-  Pelada({required this.date, required this.usersPerformance});
+  Pelada({required this.id, required this.date, required this.usersPerformance});
 
   factory Pelada.fromJson(Map<String, dynamic>? data) {
+    print('PELADA DATA $data');
     final performances = data?['performance'] as Map<String, dynamic>;
     List<UserPerformance> allPerformances = [];
     if (performances.isNotEmpty) {
@@ -15,7 +17,7 @@ class Pelada {
     }
     final dateFromTimestamp = DateTime.fromMicrosecondsSinceEpoch(
         data?['date'].microsecondsSinceEpoch);
-    return Pelada(date: dateFromTimestamp, usersPerformance: allPerformances);
+    return Pelada(id: data?['id'], date: dateFromTimestamp, usersPerformance: allPerformances);
   }
 
   toJson() {

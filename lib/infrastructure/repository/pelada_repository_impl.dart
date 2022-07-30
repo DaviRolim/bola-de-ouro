@@ -1,89 +1,68 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 import '../models/pelada.dart';
 import '../models/player.dart';
 import '../models/playerPerformance.dart';
 
-class PeladaState extends ChangeNotifier {
-  List<QueryDocumentSnapshot<Pelada>>? _peladas;
-  List<QueryDocumentSnapshot<Pelada>> get peladas => _peladas ?? [];
-  bool isPeladaAdmin = false;
-  List<UserPerformance>? _performances;
-  List<UserPerformance> get performances => _performances ?? [];
-
+class PeladaRepositoryImpl {
   final _firestore = FirebaseFirestore.instance;
+  bool isPeladaAdmin = false;
 
-  CollectionReference<Pelada> get _peladasRef =>
-      _firestore.collection('peladas').withConverter<Pelada>(
-            fromFirestore: (snapshot, _) => Pelada.fromJson(snapshot.data()),
-            toFirestore: (Pelada pelada, _) => pelada.toJson(),
-          );
-  PeladaState() {
-    _peladasRef
-        .orderBy('date', descending: true)
-        .limit(1)
+  void addNewPelada() async {
+    final peladaData = {"date": Timestamp.now(), "performance": {}};
+    _firestore.collection('peladas').add(peladaData);
+  }
+
+  Stream<Pelada> getPeladaOfCurrentDay() {
+    final now = DateTime.now().toLocal();
+    final today = DateTime(now.year, now.month, now.day);
+    return _firestore
+        .collection('peladas')
+        .where('date', isGreaterThanOrEqualTo: today)
         .snapshots()
-        .listen((event) {
-      final mostRecentPelada = event.docs[0];
-      if (mostRecentPelada.data().date.day == DateTime.now().day) {
-        _peladas = event.docs;
-        final currentPelada = event.docs.first.data();
-        final userPerformances = currentPelada.usersPerformance;
-        userPerformances.sort((a, b) => a.name.compareTo(b.name));
-        _performances = userPerformances;
-        // _performances = userPerformances.reversed.toList();
-      } else {
-        _peladas = [];
-      }
-      notifyListeners();
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return Pelada.fromJson(data);
+      }).toList()[0];
     });
   }
 
-  void startNewPelada() async {
-    final peladaData = {"date": Timestamp.now(), "performance": {}};
-    _firestore.collection('peladas').add(peladaData);
-    notifyListeners();
-  }
-
-  void addPlayerToPelada(Player Player) {
-    final currentPelada = _peladas?.first;
-    final peladaId = currentPelada?.id;
-    final performances = currentPelada?.data().usersPerformance;
+  void addPlayerToPelada(Pelada pelada, Player player) async {
+    final performances = pelada.usersPerformance;
     final jsonPerformances = {};
-    for (var performance in performances!) {
+    for (var performance in performances) {
       jsonPerformances[performance.id] = UserPerformance.toJson(performance);
     }
-    jsonPerformances[Player.id] = {"name": Player.name, "gols": 0};
+    jsonPerformances[player.id] = {"name": player.name, "gols": 0};
 
     _firestore
         .collection('peladas')
-        .doc(peladaId!)
+        .doc(pelada.id)
         .update({"performance": jsonPerformances});
   }
 
-  void goalScoredInPeladaByUser(String userId) {
-    final currentPelada = _peladas?.first;
-    final peladaId = currentPelada?.id;
+  void addGolToPlayer(Pelada pelada, String userId) {
+    final peladaId = pelada.id;
     _firestore
         .collection('peladas')
-        .doc(peladaId!)
+        .doc(peladaId)
         .update({"performance.$userId.gols": FieldValue.increment(1)});
   }
 
-  void removeGolInPeladaFromUser(String userId) {
-    final currentPelada = _peladas?.first;
-    final peladaId = currentPelada?.id;
+  void removeGolFromPlayer(Pelada pelada, String userId) {
+    final peladaId = pelada.id;
     _firestore
         .collection('peladas')
-        .doc(peladaId!)
+        .doc(peladaId)
         .update({"performance.$userId.gols": FieldValue.increment(-1)});
   }
 
-  void validateAdminSecret(String secret) {
+  bool isAdminSecret(String secret) {
     if (secret == 'uniaoflasco') {
-      isPeladaAdmin = true;
-      notifyListeners();
+      return true;
     }
+    return false;
   }
 }

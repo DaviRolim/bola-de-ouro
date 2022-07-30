@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bola_de_ouro/infrastructure/repository/player_repository.dart';
+import 'package:bola_de_ouro/infrastructure/repository/player_repository_impl.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../infrastructure/models/player.dart';

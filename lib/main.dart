@@ -1,3 +1,4 @@
+import 'package:bola_de_ouro/presentation/providers/pelada_provider.dart';
 import 'package:bola_de_ouro/presentation/providers/player_provider.dart';
 import 'package:bola_de_ouro/presentation/ui/home/home.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,13 +19,13 @@ void main() async {
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(
-        create: (_) => PeladaState(),
-      ),
-      ChangeNotifierProvider(
         create: (_) => UserState(),
       ),
       ChangeNotifierProvider(
         create: (_) => PlayerProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => PeladaProvider(),
       ),
     ], child: const MyApp()),
   );

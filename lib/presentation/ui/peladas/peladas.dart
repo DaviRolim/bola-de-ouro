@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../infrastructure/models/playerPerformance.dart';
 import '../../../infrastructure/repository/pelada_repository_impl.dart';
 import '../../../infrastructure/repository/user_repository.dart';
+import '../../providers/pelada_provider.dart';
 import '../shared/navigation_drawer.dart';
 
 class AddPlayerCard extends StatelessWidget {
@@ -52,7 +53,7 @@ class AddPlayerCard extends StatelessWidget {
                           child: IconButton(
                             onPressed: () {
                               context
-                                  .read<PeladaState>()
+                                  .read<PeladaProvider>()
                                   .addPlayerToPelada(player);
                             },
                             icon: const Icon(Icons.add),
@@ -91,7 +92,7 @@ class ButtonStartPelada extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             primary: isPeladaAdmin ? Colors.black : Colors.transparent),
         onPressed: () =>
-            isPeladaAdmin ? context.read<PeladaState>().startNewPelada() : null,
+            isPeladaAdmin ? context.read<PeladaProvider>().startNewPelada() : null,
         label: Text(
           'Iniciar Pelada',
           style: Theme.of(context)
@@ -128,7 +129,7 @@ class PeladaPage extends StatefulWidget {
 }
 
 class PeladaPlayersDisplay extends StatelessWidget {
-  final List<QueryDocumentSnapshot<Pelada>> pelada;
+  final Pelada pelada;
 
   final bool isPeladaAdmin;
   const PeladaPlayersDisplay({
@@ -141,18 +142,16 @@ class PeladaPlayersDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        child: Consumer<PeladaState>(
-          builder: (_, peladaState, __) => Column(
+        child:  Column(
             children: [
-              peladaState.performances.isEmpty
+              pelada.usersPerformance.isEmpty
                   ? const NoPlayerText()
                   : PlayingPlayersList(
-                      performances: peladaState.performances,
+                      performances: pelada.usersPerformance,
                       isPeladaAdmin: isPeladaAdmin),
             ],
           ),
         ),
-      ),
     );
   }
 }
@@ -218,8 +217,8 @@ class PlayingPlayersList extends StatelessWidget {
                                             .removeGolFromUser(
                                                 userPerformance.id);
                                         context
-                                            .read<PeladaState>()
-                                            .removeGolInPeladaFromUser(
+                                            .read<PeladaProvider>()
+                                            .removeGolFromPlayer(
                                                 userPerformance.id);
                                       },
                                       child: const Icon(
@@ -259,8 +258,8 @@ class PlayingPlayersList extends StatelessWidget {
                                               .read<UserState>()
                                               .goalScoredBy(userPerformance.id);
                                           context
-                                              .read<PeladaState>()
-                                              .goalScoredInPeladaByUser(
+                                              .read<PeladaProvider>()
+                                              .playerScored(
                                                   userPerformance.id);
                                         }),
                                   ),
@@ -300,7 +299,7 @@ class SecretPeladaAdminInput extends StatelessWidget {
           labelText: 'Pelada admin secret',
         ),
         onSubmitted: (String value) {
-          context.read<PeladaState>().validateAdminSecret(value);
+          context.read<PeladaProvider>().validatePeladaAdmin(value);
         },
       ),
     );
@@ -314,16 +313,16 @@ class _PeladaPageState extends State<PeladaPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final pelada = context.watch<PeladaState>().peladas;
-    final isPeladaAdmin = context.watch<PeladaState>().isPeladaAdmin;
+    final pelada = context.watch<PeladaProvider>().todaysPelada;
+    final isPeladaAdmin = context.watch<PeladaProvider>().isPeladaAdmin;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
           backgroundColor: Colors.green,
           centerTitle: true,
-          title: pelada.isNotEmpty
+          title: pelada != null
               ? Text(
-                  'Pelada do dia ${DateFormat.MMMMd('pt_BR').format(pelada.first.data().date)}',
+                  'Pelada do dia ${DateFormat.MMMMd('pt_BR').format(pelada.date)}',
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!
@@ -335,7 +334,7 @@ class _PeladaPageState extends State<PeladaPage> {
       body: SafeArea(
         child: Container(
           color: Colors.green,
-          child: pelada.isEmpty
+          child: pelada == null
               ? isPeladaAdmin
                   ? ButtonStartPelada(isPeladaAdmin: isPeladaAdmin)
                   : Center(

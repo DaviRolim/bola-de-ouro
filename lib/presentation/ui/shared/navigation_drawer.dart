@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../infrastructure/repository/pelada_repository_impl.dart';
+import '../../providers/pelada_provider.dart';
 import '../home/home.dart';
 import '../manage_users/manage_users.dart';
 import '../peladas/peladas.dart';
@@ -37,10 +38,10 @@ class NavigationDrawer extends StatelessWidget {
                     builder: (context) => const PeladaPage()));
               },
             ),
-            Consumer<PeladaState>(
-              builder: (_, peladaState, __) => Column(
+            Consumer<PeladaProvider>(
+              builder: (_, peladaProvider, __) => Column(
                 children: [
-                  peladaState.isPeladaAdmin
+                  peladaProvider.isPeladaAdmin
                       ? ListTile(
                           leading: const Icon(Icons.person),
                           title: const Text('Gerenciar Jogadores'),
