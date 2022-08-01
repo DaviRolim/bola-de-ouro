@@ -19,7 +19,7 @@ void main() async {
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(
-        create: (_) => di.sl<PlayerProvider>(),
+        create: (_) => di.getIt<PlayerProvider>(),
       ),
       ChangeNotifierProvider(
         create: (_) => PeladaProvider(),

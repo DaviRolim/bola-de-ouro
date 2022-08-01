@@ -4,10 +4,10 @@ import 'package:get_it/get_it.dart';
 
 import 'domain/repository/player_repository.dart';
 
-final sl = GetIt.instance;
+final getIt = GetIt.instance;
 
 Future<void> init() async {
   // Repository
-  sl.registerLazySingleton<PlayerRepository>(() => PlayerRepositoryImpl());
-  sl.registerLazySingleton<PlayerProvider>(() => PlayerProvider(sl()));
+  getIt.registerLazySingleton<PlayerRepository>(() => PlayerRepositoryImpl());
+  getIt.registerLazySingleton<PlayerProvider>(() => PlayerProvider(getIt()));
 }
