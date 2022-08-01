@@ -1,19 +1,18 @@
 import 'dart:async';
 
-import 'package:bola_de_ouro/infrastructure/repository/player_repository_impl.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../domain/repository/player_repository.dart';
 import '../../infrastructure/models/player.dart';
 
 class PlayerProvider extends ChangeNotifier {
-  final repository = PlayerRepository();
+  final PlayerRepository repository;
   List<Player>? _players;
   List<Player> get players => _players ?? [];
 
   List<Player>? _monthlyPlayers;
   List<Player> get monthlyPlayers => _monthlyPlayers ?? [];
-
-  PlayerProvider() {
+  PlayerProvider(this.repository) {
     subscribePlayers();
     subscribeMonthlyPlayer();
   }

@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../domain/repository/player_repository.dart';
 import '../models/player.dart';
 
-class PlayerRepository {
+class PlayerRepositoryImpl implements PlayerRepository {
   final _firestore = FirebaseFirestore.instance;
+  @override
   Stream<List<Player>> watchMonthlyPlayers() {
     return _firestore
         .collection('users')
@@ -19,6 +21,7 @@ class PlayerRepository {
     });
   }
 
+  @override
   Stream<List<Player>> watchPlayers() {
     return _firestore
         .collection('users')
@@ -33,6 +36,7 @@ class PlayerRepository {
     });
   }
 
+  @override
   void addUser(String playerName, bool isMonthlyPayer) {
     final jsonNewUser = {
       "name": playerName,
@@ -42,6 +46,7 @@ class PlayerRepository {
     _firestore.collection('users').add(jsonNewUser);
   }
 
+  @override
   void updateUser(String id, String name, bool isMonthlyPayer, int totalGols,
       DateTime? lastPay) {
     final jsonNewUser = {
@@ -53,6 +58,7 @@ class PlayerRepository {
     _firestore.collection('users').doc(id).set(jsonNewUser);
   }
 
+  @override
   void increaseUserTotalGols(String userId) {
     _firestore
         .collection('users')
@@ -60,6 +66,7 @@ class PlayerRepository {
         .update({"totalGols": FieldValue.increment(1)});
   }
 
+  @override
   void decreaseUserTotalGols(String userId) {
     _firestore
         .collection('users')

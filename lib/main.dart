@@ -7,9 +7,11 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
+import 'injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   initializeDateFormatting('pt_BR');
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -17,7 +19,7 @@ void main() async {
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(
-        create: (_) => PlayerProvider(),
+        create: (_) => di.sl<PlayerProvider>(),
       ),
       ChangeNotifierProvider(
         create: (_) => PeladaProvider(),
