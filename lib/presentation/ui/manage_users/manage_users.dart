@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
-import '../../../infrastructure/models/player.dart';
 import '../../providers/player_provider.dart';
 import '../shared/navigation_drawer.dart';
+import 'components/edit_player_row.dart';
 
 enum PaymentType { daily, monthly }
 
@@ -50,69 +49,9 @@ class _UserManagementState extends State<UserManagement> {
           child: Center(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      width: 200,
-                      child: TextField(
-                        controller: _controller,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Nome do Jogador',
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          ListTile(
-                            title: const Text('Diarista'),
-                            leading: Radio<PaymentType>(
-                              value: PaymentType.daily,
-                              groupValue: _paymentType,
-                              onChanged: (PaymentType? value) {
-                                setState(() {
-                                  _paymentType = value;
-                                });
-                              },
-                            ),
-                          ),
-                          ListTile(
-                            title: const Text('Mensalista'),
-                            leading: Radio<PaymentType>(
-                              value: PaymentType.monthly,
-                              groupValue: _paymentType,
-                              onChanged: (PaymentType? value) {
-                                setState(() {
-                                  _paymentType = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                _buildAddPlayerFields(),
                 const SizedBox(height: 10),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Colors.green),
-                  child: const Text('Adicionar',
-                      style: TextStyle(color: Colors.white)),
-                  onPressed: () {
-                    _submitAddPlayerForm(context);
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Colors.green,
-                      content: Text(
-                        'Jogador adicionado com sucesso',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      duration: Duration(seconds: 2),
-                    ));
-                  },
-                ),
+                _buildAddUserButton(context),
                 const SizedBox(height: 30),
                 Card(
                   child: Consumer<PlayerProvider>(
@@ -133,7 +72,7 @@ class _UserManagementState extends State<UserManagement> {
                           itemCount: playerProvider.players.length,
                           itemBuilder: (_, index) {
                             final player = playerProvider.players[index];
-                            return EditUserRow(player: player);
+                            return EditPlayerRow(player: player);
                           },
                         ),
                       ],
@@ -147,118 +86,71 @@ class _UserManagementState extends State<UserManagement> {
       ),
     );
   }
-}
 
-class EditUserRow extends StatefulWidget {
-  const EditUserRow({super.key, required this.player});
-
-  final Player player;
-  @override
-  State<EditUserRow> createState() => _EditUserRowState();
-}
-
-class _EditUserRowState extends State<EditUserRow> {
-  late bool _isMonthlyPayer;
-  late TextEditingController _controller;
-  late DateTime? _payDay;
-  bool isEditing = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-    _controller.text = widget.player.name;
-    _isMonthlyPayer = widget.player.isMonthlyPayer;
-    _payDay = widget.player.lastPay;
+  ElevatedButton _buildAddUserButton(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(primary: Colors.green),
+      child: const Text('Adicionar', style: TextStyle(color: Colors.white)),
+      onPressed: () {
+        _submitAddPlayerForm(context);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.green,
+          content: Text(
+            'Jogador adicionado com sucesso',
+            style: TextStyle(color: Colors.white),
+          ),
+          duration: Duration(seconds: 2),
+        ));
+      },
+    );
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _submitEditPlayerForm(BuildContext context) {
-    context.read<PlayerProvider>().editUser(widget.player.id, _controller.text,
-        _isMonthlyPayer, widget.player.totalGols, _payDay);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      margin: const EdgeInsets.symmetric(vertical: 9.0),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 120,
-            child: TextField(
-              readOnly: isEditing ? false : true,
-              controller: _controller,
+  Row _buildAddPlayerFields() {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          width: 200,
+          child: TextField(
+            controller: _controller,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Nome do Jogador',
             ),
           ),
-          const SizedBox(width: 8),
-          // const Text('Mensal'),
-          if (!isEditing)
-            Container(
-                width: 80,
-                padding: const EdgeInsets.only(right: 10),
-                child: Text(
-                    widget.player.isMonthlyPayer ? 'Mensalista' : 'Diarista')),
-          if (isEditing)
-            Checkbox(
-              checkColor: Colors.white,
-              // fillColor: Colors.green,
-              value: _isMonthlyPayer,
-              onChanged: (bool? value) {
-                setState(() {
-                  _isMonthlyPayer = value!;
-                });
-              },
-            ),
-          if (isEditing)
-            Flexible(
-              child: ElevatedButton(
-                  child: const Text('Data Pagamento'),
-                  onPressed: () async {
-                    DateTime? newDate = await showDatePicker(
-                      context: context,
-                      initialDate: _payDay ?? DateTime.now(),
-                      firstDate: DateTime(2021),
-                      lastDate: DateTime(2023),
-                    );
-
-                    if (newDate == null) return;
+        ),
+        Expanded(
+          child: Column(
+            children: [
+              ListTile(
+                title: const Text('Diarista'),
+                leading: Radio<PaymentType>(
+                  value: PaymentType.daily,
+                  groupValue: _paymentType,
+                  onChanged: (PaymentType? value) {
                     setState(() {
-                      _payDay = newDate;
+                      _paymentType = value;
                     });
-                  }),
-            ),
-          if (!isEditing)
-            Text(_payDay != null
-                ? DateFormat.MMMMd('pt_BR').format(_payDay!)
-                : '-'),
-          IconButton(
-              icon: isEditing ? const Icon(Icons.save) : const Icon(Icons.edit),
-              onPressed: () {
-                if (isEditing) {
-                  _submitEditPlayerForm(context);
-                }
-                setState(() {
-                  isEditing = !isEditing;
-                });
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  backgroundColor: Colors.green,
-                  content: Text(
-                    'Alteração feita com sucesso',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  duration: Duration(seconds: 2),
-                ));
-              })
-        ],
-      ),
+                  },
+                ),
+              ),
+              ListTile(
+                title: const Text('Mensalista'),
+                leading: Radio<PaymentType>(
+                  value: PaymentType.monthly,
+                  groupValue: _paymentType,
+                  onChanged: (PaymentType? value) {
+                    setState(() {
+                      _paymentType = value;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

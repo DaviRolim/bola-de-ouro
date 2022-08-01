@@ -5,7 +5,7 @@ import '../../../infrastructure/repository/pelada_repository_impl.dart';
 import '../../providers/pelada_provider.dart';
 import '../home/home.dart';
 import '../manage_users/manage_users.dart';
-import '../peladas/peladas.dart';
+import '../peladas/pelada.dart';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({
