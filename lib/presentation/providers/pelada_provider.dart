@@ -1,16 +1,16 @@
-import 'package:bola_de_ouro/infrastructure/repository/pelada_repository_impl.dart';
 import 'package:flutter/material.dart';
 
-import '../../infrastructure/models/pelada.dart';
-import '../../infrastructure/models/player.dart';
+import '../../domain/entities/pelada.dart';
+import '../../domain/entities/player.dart';
+import '../../domain/repository/pelada_repository.dart';
 
 class PeladaProvider extends ChangeNotifier {
-  final repository = PeladaRepositoryImpl();
+  final PeladaRepository repository;
   Pelada? _todaysPelada;
   Pelada? get todaysPelada => _todaysPelada;
   bool isPeladaAdmin = false;
 
-  PeladaProvider() {
+  PeladaProvider(this.repository) {
     subscribeTodaysPelada();
   }
   subscribeTodaysPelada() {

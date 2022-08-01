@@ -1,14 +1,13 @@
-import 'package:bola_de_ouro/infrastructure/models/pelada.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../domain/entities/pelada.dart';
 import '../../providers/pelada_provider.dart';
 import '../shared/navigation_drawer.dart';
 import 'components/add_player_card.dart';
 import 'components/pelada_admin_input.dart';
 import 'components/players_in_pelada_card.dart';
-import 'components/playing_players.dart';
 
 class PeladaPage extends StatefulWidget {
   const PeladaPage({Key? key}) : super(key: key);

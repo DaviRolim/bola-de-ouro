@@ -1,4 +1,5 @@
-import '../../infrastructure/models/player.dart';
+
+import '../entities/player.dart';
 
 abstract class PlayerRepository {
   Stream<List<Player>> watchMonthlyPlayers();

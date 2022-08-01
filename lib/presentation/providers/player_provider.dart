@@ -1,9 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 
+import '../../domain/entities/player.dart';
 import '../../domain/repository/player_repository.dart';
-import '../../infrastructure/models/player.dart';
 
 class PlayerProvider extends ChangeNotifier {
   final PlayerRepository repository;

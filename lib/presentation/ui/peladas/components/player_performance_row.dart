@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../infrastructure/models/playerPerformance.dart';
+import '../../../../domain/entities/playerPerformance.dart';
 import '../../../providers/pelada_provider.dart';
 import '../../../providers/player_provider.dart';
 

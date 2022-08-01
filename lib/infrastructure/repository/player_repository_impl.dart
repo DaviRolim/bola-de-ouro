@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../domain/entities/player.dart';
 import '../../domain/repository/player_repository.dart';
-import '../models/player.dart';
 
 class PlayerRepositoryImpl implements PlayerRepository {
   final _firestore = FirebaseFirestore.instance;

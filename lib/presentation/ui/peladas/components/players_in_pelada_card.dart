@@ -1,7 +1,7 @@
 import 'package:bola_de_ouro/presentation/ui/peladas/components/playing_players.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../infrastructure/models/pelada.dart';
+import '../../../../domain/entities/pelada.dart';
 
 class PeladaPlayersDisplay extends StatelessWidget {
   final Pelada pelada;

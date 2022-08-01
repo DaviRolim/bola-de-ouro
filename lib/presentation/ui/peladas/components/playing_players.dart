@@ -1,7 +1,8 @@
 import 'package:bola_de_ouro/presentation/ui/peladas/components/player_performance_row.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../infrastructure/models/playerPerformance.dart';
+import '../../../../domain/entities/playerPerformance.dart';
+
 
 class PlayingPlayersList extends StatelessWidget {
   final List<UserPerformance> performances;

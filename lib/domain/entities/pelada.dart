@@ -1,4 +1,5 @@
-import 'package:bola_de_ouro/infrastructure/models/playerPerformance.dart';
+
+import 'package:bola_de_ouro/domain/entities/playerPerformance.dart';
 
 class Pelada {
   final String id;

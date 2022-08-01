@@ -22,7 +22,7 @@ void main() async {
         create: (_) => di.getIt<PlayerProvider>(),
       ),
       ChangeNotifierProvider(
-        create: (_) => PeladaProvider(),
+        create: (_) => di.getIt<PeladaProvider>(),
       ),
     ], child: const MyApp()),
   );

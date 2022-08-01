@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../infrastructure/models/player.dart';
+import '../../../../domain/entities/player.dart';
 import '../../../providers/player_provider.dart';
 
 class EditPlayerRow extends StatefulWidget {
